@@ -10,7 +10,7 @@ endif()
 ADD_EXECUTABLE(testChainGrabber   testLib.cpp src/MockDatabaseImpl.cpp src/MockDatabaseImpl.h)
 target_include_directories(testChainGrabber PUBLIC .)
 
-target_link_libraries(testChainGrabber chain_grabber gmock_main ${Boost_LIBRARIES} ${LIBMONGOCXX_LIBRARIES} fruit)
+target_link_libraries(testChainGrabber chain_grabber gmock_main ${Boost_LIBRARIES} ${LIBMONGOCXX_LIBRARIES}  nlohmann_json::nlohmann_json)
 get_target_property(OUT testChainGrabber LINK_LIBRARIES)
 message(STATUS ${OUT})
 

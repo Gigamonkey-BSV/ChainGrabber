@@ -4,12 +4,13 @@
 
 #include "MockDatabaseImpl.h"
 
-int chain_grabber::tests::MockDatabaseImpl::InsertHeader(chain_grabber::header header) {
-    headers.insert(std::make_pair(curId++,header));
-    return 1;
+std::string chain_grabber::tests::MockDatabaseImpl::InsertHeader(chain_grabber::header header) {
+    std::string id=std::to_string(curId++);
+    headers.insert(std::make_pair(id,header));
+    return id;
 }
 
-chain_grabber::header chain_grabber::tests::MockDatabaseImpl::GetHeader(int id) {
+chain_grabber::header chain_grabber::tests::MockDatabaseImpl::GetHeader(std::string id) {
     return headers[id];
 }
 
@@ -27,5 +28,9 @@ chain_grabber::header chain_grabber::tests::MockDatabaseImpl::FindHeaderByHash(s
             return cur.second;
     }
     return header() ;
+}
+
+void chain_grabber::tests::MockDatabaseImpl::connect() {
+
 }
 

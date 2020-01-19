@@ -5,23 +5,25 @@
 #ifndef CHAIN_GRABBER_MOCKDATABASEIMPL_H
 #define CHAIN_GRABBER_MOCKDATABASEIMPL_H
 
-#include <fruit/fruit.h>
 #include <map>
 #include "chainGrabber/Database.h"
 namespace chain_grabber::tests {
     class MockDatabaseImpl : public Database {
-        INJECT(MockDatabaseImpl())= default;
+        MockDatabaseImpl()= default;
 
     public:
-        int InsertHeader(header header) override;
+        std::string InsertHeader(header header) override;
 
-        header GetHeader(int id) override;
+        header GetHeader(std::string id) override;
 
         header FindHeaderByMerkle(std::string hash) override;
 
         header FindHeaderByHash(std::string hash) override;
+
+        void connect() override;
+
     private:
-        std::map<int,header> headers;
+        std::map<std::string,header> headers;
         int curId=0;
     };
 

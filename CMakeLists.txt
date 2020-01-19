@@ -59,7 +59,7 @@ set(Boost_USE_DEBUG_RUNTIME     OFF         CACHE BOOL "") # '-g' tag
 set(Boost_COMPILER              "-mgw49"    CACHE STRING "")
 
 # Include Boost
-find_package(Boost 1.72.0 COMPONENTS system  REQUIRED)
+find_package(Boost 1.72.0 COMPONENTS system program_options REQUIRED)
 
 if(Boost_FOUND)
 
@@ -81,7 +81,14 @@ include_directories(${LIBBSONCXX_LIBRARIES})
 include_directories(${LIBMONGOCXX_INCLUDE_DIRS})
 include_directories(${LIBBSONCXX_INCLUDE_DIRS})
 
-## Enable testing
+#json
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(HYPODERMIC REQUIRED libhypodermic)
+
+		## Enable testing
 include(CTest)
 
 if(PACKAGE_TESTS)
@@ -94,13 +101,13 @@ endif()
 #  Add Library source files here
 
 add_library(chain_grabber
-		src/chainGrabber/DatabaseImpl.cpp)
+		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/DatabaseComponent.h src/chainGrabber/DatabaseComponent.cpp)
         
 
 add_executable(chain_grabber_main src/main.cpp)
-target_link_libraries(chain_grabber_main chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES} fruit)
 
-target_include_directories(chain_grabber PUBLIC include)
+target_link_libraries(chain_grabber_main chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json)
+target_include_directories(chain_grabber PUBLIC include ${HYPODERMIC_INCLUDE_DIRS})
 
 # Set C++ version
 target_compile_features(chain_grabber PUBLIC cxx_std_17)

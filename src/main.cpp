@@ -2,53 +2,22 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <fruit/fruit.h>
+
 #include <iostream>
+#include <chainGrabber/Database.h>
+#include <chainGrabber/MongoDatabase.h>
+#include <chainGrabber/DatabaseComponent.h>
+#include <chainGrabber/ConfigurationManager.h>
+#include <chainGrabber/ConfigurationManagerJSON.h>
+#include "Hypodermic/Hypodermic.h"
+int main(int ac,char** av) {
+    Hypodermic::ContainerBuilder builder;
+    builder.registerType<chain_grabber::ConfigurationManagerJSON>().as<chain_grabber::ConfigurationManager>().singleInstance();
+    builder.registerType<chain_grabber::MongoDatabase>().as<chain_grabber::Database>();
+    auto container=builder.build();
+    container->resolve<chain_grabber::ConfigurationManager>()->loadConfigs(ac,av);
+    auto database=container->resolve<chain_grabber::Database>();
+    database->connect();
 
-class Writer {
-public:
-    virtual void write(std::string s) = 0;
-};
-
-class StdoutWriter : public Writer {
-public:
-    // Like "StdoutWriter() = default;" but also marks this constructor as the one to use for injection.
-    INJECT(StdoutWriter()) = default;
-
-    virtual void write(std::string s) override {
-        std::cout << s;
-    }
-};
-
-class Greeter {
-public:
-    virtual void greet() = 0;
-};
-
-class GreeterImpl : public Greeter {
-private:
-    Writer* writer;
-
-public:
-    // Like "GreeterImpl(Writer* writer) : ... {...}" but also marks this constructor as the one to use for injection.
-    INJECT(GreeterImpl(Writer* writer))
-            : writer(writer) {
-    }
-
-    virtual void greet() override {
-        writer->write("Hello world!\n");
-    }
-};
-
-fruit::Component<Greeter> getGreeterComponent() {
-    return fruit::createComponent()
-            .bind<Writer, StdoutWriter>()
-            .bind<Greeter, GreeterImpl>();
-}
-
-int main() {
-    fruit::Injector<Greeter> injector(getGreeterComponent);
-    Greeter* greeter = injector.get<Greeter*>();
-    greeter->greet();
     return 0;
 }
