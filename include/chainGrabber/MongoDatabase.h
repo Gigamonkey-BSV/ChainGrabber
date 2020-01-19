@@ -24,7 +24,7 @@ namespace  chain_grabber {
         mongocxx::client client;
         static chain_grabber::header documentToStruct(bsoncxx::document::view view);
     public:
-        MongoDatabase(std::shared_ptr<ConfigurationManager> config)
+        explicit MongoDatabase(std::shared_ptr<ConfigurationManager> config)
         :config(config), instance{} {
 
         };
