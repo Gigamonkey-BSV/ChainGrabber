@@ -59,7 +59,7 @@ set(Boost_USE_DEBUG_RUNTIME     OFF         CACHE BOOL "") # '-g' tag
 set(Boost_COMPILER              "-mgw49"    CACHE STRING "")
 
 # Include Boost
-find_package(Boost 1.72.0 COMPONENTS system program_options REQUIRED)
+find_package(Boost 1.72.0 COMPONENTS system program_options  REQUIRED)
 
 if(Boost_FOUND)
 
@@ -101,12 +101,12 @@ endif()
 #  Add Library source files here
 
 add_library(chain_grabber
-		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/DatabaseComponent.h src/chainGrabber/DatabaseComponent.cpp)
+		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/BitcoinAPI.h include/chainGrabber/WhatsOnChainAPI.h src/chainGrabber/WhatsOnChainAPI.cpp)
         
 
 add_executable(chain_grabber_main src/main.cpp)
 
-target_link_libraries(chain_grabber_main chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json)
+target_link_libraries(chain_grabber_main chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z)
 target_include_directories(chain_grabber PUBLIC include ${HYPODERMIC_INCLUDE_DIRS})
 
 # Set C++ version
