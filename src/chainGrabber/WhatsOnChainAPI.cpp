@@ -17,8 +17,9 @@ namespace net = boost::asio;        // from <boost/asio.hpp>
 using tcp = net::ip::tcp;           // from <boost/asio/ip/tcp.hpp>
 
 namespace chain_grabber {
-    const char* WHATS_ON_API_BASE="/v1/bsv/main/";
+    std::string WHATS_ON_API_BASE="/v1/bsv/main/";
     const char* WHATS_ON_HOST="api.whatsonchain.com";
+    std::string WHATS_ON_INFO="chain/info";
 
     header WhatsOnChainAPI::GetBlockHeader(std::string hash) {
         return header();
@@ -31,11 +32,13 @@ namespace chain_grabber {
         beast::tcp_stream stream(ioc);
 
 
-        const char* target=(std::string(WHATS_ON_API_BASE)+"chain/info").c_str();
+        std::string target=WHATS_ON_API_BASE+WHATS_ON_INFO;
         // Look up the domain name
         auto const results = resolver.resolve(WHATS_ON_HOST, "80");
 
         stream.connect(results);
+        std::cout << target << std::endl;
+        std::cout << WHATS_ON_HOST << std::endl;
         http::request<http::string_body> req{http::verb::get,target , 11};
         req.set(http::field::host, WHATS_ON_HOST);
         req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);

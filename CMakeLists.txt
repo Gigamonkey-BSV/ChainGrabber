@@ -99,15 +99,19 @@ if(PACKAGE_TESTS)
 endif()
 
 #  Add Library source files here
-
+find_package(OpenSSL REQUIRED)
 add_library(chain_grabber
-		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/BitcoinAPI.h include/chainGrabber/WhatsOnChainAPI.h src/chainGrabber/WhatsOnChainAPI.cpp)
+		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/BitcoinAPI.h include/chainGrabber/WhatsOnChainAPI.h src/chainGrabber/WhatsOnChainAPI.cpp include/chainGrabber/certificates.h include/chainLink/ChainLink.h src/chainLink/ChainLink.cpp include/chainLink/messages/BaseMessage.h include/chainLink/messages/MessageHeader.h)
         
 
-add_executable(chain_grabber_main src/main.cpp)
+add_library(chain_link src/chainLink/ChainLink.cpp)
+add_executable(chain_grabber_main src/main.cpp )
+add_executable(chain_grabber_test src/test.cpp)
 
-target_link_libraries(chain_grabber_main chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z)
-target_include_directories(chain_grabber PUBLIC include ${HYPODERMIC_INCLUDE_DIRS})
+target_link_libraries(chain_grabber_main chain_link chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z)
+target_link_libraries(chain_grabber_test chain_link chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z OpenSSL::SSL OpenSSL::Crypto)
+target_include_directories(chain_grabber PUBLIC include chain_link ${HYPODERMIC_INCLUDE_DIRS})
+
 
 # Set C++ version
 target_compile_features(chain_grabber PUBLIC cxx_std_17)

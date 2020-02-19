@@ -1,0 +1,8 @@
+//
+// Created by nekosune on 19/02/2020.
+//
+
+#ifndef CHAIN_GRABBER_CHAINLINK_H
+#define CHAIN_GRABBER_CHAINLINK_H
+
+#endif //CHAIN_GRABBER_CHAINLINK_H
