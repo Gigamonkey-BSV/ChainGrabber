@@ -5,11 +5,14 @@
 #ifndef CHAIN_GRABBER_CONFIGURATIONMANAGER_H
 #define CHAIN_GRABBER_CONFIGURATIONMANAGER_H
 #include <string>
+#include "chainLink/Network.h"
+
 namespace chain_grabber {
     class ConfigurationManager {
     public:
         virtual std::string getString(std::string configName) = 0;
         virtual int getInt(std::string configName) = 0;
+        virtual Network getNetwork() = 0;
         virtual void loadConfigs(int ac, char* av[]) = 0;
     };
 

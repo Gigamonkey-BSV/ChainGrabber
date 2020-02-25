@@ -10,6 +10,7 @@ namespace po = boost::program_options;
 #include <iterator>
 #include <fstream>
 #include <iomanip>
+#include "chainLink/Network.h"
 
 namespace chain_grabber {
 
@@ -39,6 +40,7 @@ namespace chain_grabber {
                 ("help","produce help message")
                 ("configFile",po::value<std::string>()->default_value("./config.json"),"Config file location")
                 ("connectionString",po::value<std::string>()->default_value("mongodb://localhost:27017"),"connection string for mongodb")
+                ("net",po::value<std::string>()->default_value("main"),"Which network should this use")
                 ;
         po::store(po::parse_command_line(ac,av,desc),vm);
         po::notify(vm);
@@ -53,6 +55,7 @@ namespace chain_grabber {
                 i >> configFile;
             else{
                 configFile["connectionString"] = vm["connectionString"].as<std::string>();
+                configFile["net"] = vm["net"].as<std::string>();
                 std::ofstream o(vm["configFile"].as<std::string>());
                 o << std::setw(4) <<configFile << std::endl;
                 o.close();
@@ -64,5 +67,14 @@ namespace chain_grabber {
 
         setup=true;
 
+    }
+
+    Network ConfigurationManagerJSON::getNetwork() {
+        if(vm.count("net") && ! vm["net"].defaulted())
+            return vm["net"].as<std::string>() == "main" ? Network::MainNet : Network::TestNet;
+        else if(!configFile["net"].is_null() )
+            return configFile["net"]== "main" ? Network::MainNet : Network::TestNet;
+        else
+            return Network::MainNet;
     }
 }

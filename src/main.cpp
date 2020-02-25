@@ -25,8 +25,10 @@ int main(int ac,char** av) {
     auto container=builder.build();
     container->resolve<chain_grabber::ConfigurationManager>()->loadConfigs(ac,av);
     auto database=container->resolve<chain_grabber::Database>();
+
     database->connect();
     chain_grabber::header test_header();
+    Network test=container->resolve<chain_grabber::ConfigurationManager>()->getNetwork();
     auto api = container->resolve<chain_grabber::BitcoinAPI>();
     std::cout << api->GetHeadBlockHash() << std::endl;
 

@@ -104,7 +104,8 @@ add_library(chain_grabber
 		src/chainGrabber/MongoDatabase.cpp  include/chainGrabber/ConfigurationManager.h src/chainGrabber/ConfigurationManagerJSON.cpp include/chainGrabber/ConfigurationManagerJSON.h include/chainGrabber/BitcoinAPI.h include/chainGrabber/WhatsOnChainAPI.h src/chainGrabber/WhatsOnChainAPI.cpp include/chainGrabber/certificates.h include/chainLink/ChainLink.h src/chainLink/ChainLink.cpp include/chainLink/messages/BaseMessage.h include/chainLink/messages/MessageHeader.h)
         
 
-add_library(chain_link src/chainLink/ChainLink.cpp)
+include_directories("include")
+add_library(chain_link src/chainLink/Constants.cpp src/chainLink/ChainLink.cpp)
 add_executable(chain_grabber_main src/main.cpp )
 add_executable(chain_grabber_test src/test.cpp)
 

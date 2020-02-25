@@ -20,6 +20,8 @@ namespace chain_grabber {
 
         int getInt(std::string configName) override;
 
+        Network getNetwork() override;
+
         void loadConfigs(int ac, char **av) override;
 
     private:
