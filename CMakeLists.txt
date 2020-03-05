@@ -105,7 +105,14 @@ add_library(chain_grabber
         
 
 include_directories("include")
-add_library(chain_link src/chainLink/Constants.cpp src/chainLink/ChainLink.cpp)
+add_library(chain_link
+		src/chainLink/Constants.cpp
+		src/chainLink/ChainLink.cpp
+		src/chainLink/messages/Payload.cpp
+		src/chainLink/NodeServer.cpp
+		src/chainLink/Node.cpp
+		src/chainLink/messages/VersionPayload.cpp
+		src/chainLink/Address.cpp)
 add_executable(chain_grabber_main src/main.cpp )
 add_executable(chain_grabber_test src/test.cpp)
 
@@ -117,3 +124,5 @@ target_include_directories(chain_grabber PUBLIC include chain_link ${HYPODERMIC_
 # Set C++ version
 target_compile_features(chain_grabber PUBLIC cxx_std_17)
 set_target_properties(chain_grabber PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_features(chain_link PUBLIC cxx_std_17)
+set_target_properties(chain_link PROPERTIES CXX_EXTENSIONS OFF)

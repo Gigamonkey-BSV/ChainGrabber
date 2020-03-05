@@ -2,10 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <gtest/gtest.h>
+#ifndef CHAIN_GRABBER_INITIALVERSIONPAYLOAD_H
+#define CHAIN_GRABBER_INITIALVERSIONPAYLOAD_H
 
-
-int main(int argc, char *argv[]){
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+#endif //CHAIN_GRABBER_INITIALVERSIONPAYLOAD_H

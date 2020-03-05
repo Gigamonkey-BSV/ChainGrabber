@@ -1,6 +1,6 @@
-//
-// Created by nekosune on 24/02/2020.
-//
+// Copyright (c) 2019 Katrina Knight
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef CHAIN_LINK_NETWORK_H
 #define CHAIN_LINK_NETWORK_H
