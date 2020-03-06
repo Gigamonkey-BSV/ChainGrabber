@@ -34,7 +34,10 @@ TEST(TestAddress,TestDeserialize) {
     test.push_back((unsigned char)0x56);
     test.push_back((unsigned char)0x87);
     test.push_back((unsigned char)0x60);
-    chain_link::Address addr=chain_link::Address::DeSerialize(test,true);
+    chain_link::Address addr=chain_link::Address::DeSerialize(test.begin(),true);
+
+    std::vector addr2=addr.Serialize();
 
     std::cout << addr << std::endl;
+    std::cout << chain_link::Address::DeSerialize(addr2.begin(),true) << std::endl;
 }

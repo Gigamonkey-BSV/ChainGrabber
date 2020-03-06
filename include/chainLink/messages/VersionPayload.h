@@ -6,14 +6,19 @@
 #define CHAIN_GRABBER_VERSIONPAYLOAD_H
 
 #include "chainLink/messages/Payload.h"
+#include "chainLink/Address.h"
 namespace chain_link::messages {
     class Version : public Payload {
     private:
         int32_t version;
         uint64_t services;
         int64_t timestamp;
-        uint8_t ip[16];
-        uint16_t port;
+        Address addr_to;
+        Address addr_from;
+        uint64_t nonce;
+        std::string user_agent;
+        int32_t start_height;
+        bool relay;
 
     };
 }

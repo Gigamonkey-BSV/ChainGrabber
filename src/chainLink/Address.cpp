@@ -9,24 +9,37 @@
 #include "chainLink/Utils.h"
 namespace chain_link {
 
-    Address Address::DeSerialize(std::vector<unsigned char> data,bool initial) {
-        auto itr=data.begin();
+    Address Address::DeSerialize(std::vector<unsigned char>::iterator data,bool initial) {
         Address addr(initial);
-        bitsToInt<uint64_t>(addr.services,std::vector<unsigned char>(itr,itr+8));
-        itr+=8;
+        bitsToInt<uint64_t>(addr.services,std::vector<unsigned char>(data,data+8));
+        data+=8;
         if(!initial) {
-            bitsToInt<int64_t>(addr.timestamp,std::vector<unsigned char>(itr,itr+8));
-            itr+=8;
+            bitsToInt<int64_t>(addr.timestamp,std::vector<unsigned char>(data,data+8));
+            data+=8;
         }
         for(unsigned char & i : addr.ip) {
-            i = *itr++;
+            i = *data++;
         }
-        bitsToInt<uint16_t>(addr.port,std::vector<unsigned char>(itr,itr+2));
+        bitsToInt<uint16_t>(addr.port,std::vector<unsigned char>(data,data+2));
         return addr;
     }
 
     std::vector<unsigned char> Address::Serialize() {
-        return std::vector<unsigned char>();
+        std::vector<unsigned char > result;
+        std::vector<unsigned char> val;
+        val=intToBits<uint64_t>(services);
+        result.insert(result.end(),val.begin(),val.end());
+        if(!initial_)
+        {
+            val=intToBits<int16_t>(timestamp);
+            result.insert(result.end(),val.begin(),val.end());
+        }
+        for(unsigned char i : ip){
+            result.push_back(i);
+        }
+        val=intToBits<uint16_t> (port);
+        result.insert(result.end(),val.begin(),val.end());
+        return result;
     }
 
     Address::Address(bool initial) {

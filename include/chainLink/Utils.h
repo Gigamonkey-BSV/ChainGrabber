@@ -17,5 +17,20 @@ namespace chain_link {
                 result = (result << 8) + bits[n];
         return result;
     }
+
+    template<typename IntegerType>
+    std::vector<unsigned char> intToBits(IntegerType type)
+    {
+        std::vector<unsigned char> result;
+        result.push_back(type);
+        for(int n=0;n< sizeof(type)-1;n++) {
+            type = type >> 8;
+            result.push_back(type);
+        }
+
+
+        return result;
+    }
+
 }
 #endif //CHAIN_GRABBER_UTILS_H

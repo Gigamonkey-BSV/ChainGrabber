@@ -20,7 +20,7 @@ namespace chain_link {
         uint16_t port;
         bool initial_;
     public:
-        static Address DeSerialize(std::vector<unsigned char> data,bool initial);
+        static Address DeSerialize(std::vector<unsigned char>::iterator data,bool initial);
         std::vector<unsigned char> Serialize();
         explicit Address(bool initial);
     };
