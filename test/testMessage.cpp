@@ -38,5 +38,5 @@ TEST_F(MessageTest,TestInValidity) {
 TEST_F(MessageTest,InitializeMessage) {
     chain_link::messages::BaseMessage message=chain_link::messages::BaseMessage::MakeMessage("version",version1);
     EXPECT_TRUE(message.isValid());
-    
+
 }

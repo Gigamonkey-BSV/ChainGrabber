@@ -32,5 +32,12 @@ namespace chain_link::messages {
         return msg;
     }
 
+    BaseMessage::BaseMessage() {}
+
+    BaseMessage::~BaseMessage() {
+        delete payload;
+
+    }
+
 
 }

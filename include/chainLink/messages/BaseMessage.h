@@ -18,6 +18,10 @@ namespace chain_link::messages {
             Payload* payload;
             bool isValid();
             static BaseMessage MakeMessage(std::string messageType,Payload& payload);
+        protected:
+            BaseMessage();
+        protected:
+            virtual ~BaseMessage();
         };
 
 
