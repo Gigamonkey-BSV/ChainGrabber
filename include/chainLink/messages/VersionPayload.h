@@ -5,15 +5,17 @@
 #ifndef CHAIN_GRABBER_VERSIONPAYLOAD_H
 #define CHAIN_GRABBER_VERSIONPAYLOAD_H
 
+#include <ostream>
 #include "chainLink/messages/Payload.h"
 #include "chainLink/Address.h"
 namespace chain_link::messages {
     class Version : public Payload {
     public:
     private:
-        std::vector<unsigned char> Serialize() override;
 
-    private:
+
+    public:
+        std::vector<unsigned char> Serialize() override;
         int32_t version;
         uint64_t services;
         int64_t timestamp;
@@ -25,6 +27,13 @@ namespace chain_link::messages {
         bool relay;
 
 
+        static Version Deserialize(std::vector<unsigned char>::iterator& data);
+
+        friend std::ostream &operator<<(std::ostream &os, const Version &version);
+
+        bool operator==(const Version &rhs) const;
+
+        bool operator!=(const Version &rhs) const;
     };
 }
 #endif //CHAIN_GRABBER_VERSIONPAYLOAD_H

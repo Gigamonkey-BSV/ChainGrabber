@@ -10,7 +10,7 @@
 #include "chainLink/Utils.h"
 namespace chain_link {
 
-    Address Address::DeSerialize(std::vector<unsigned char>::iterator data,bool initial) {
+    Address Address::DeSerialize(std::vector<unsigned char>::iterator& data,bool initial) {
         Address addr(initial);
         bitsToInt<uint64_t>(addr.services,std::vector<unsigned char>(data,data+8));
         data+=8;
@@ -21,7 +21,8 @@ namespace chain_link {
         for(unsigned char & i : addr.ip) {
             i = *data++;
         }
-        bitsToInt<uint16_t>(addr.port,std::vector<unsigned char>(data,data+2));
+        bitsToInt<uint16_t>(addr.port,std::vector<unsigned char>(data,data+2),false);
+        data+=2;
         return addr;
     }
 
@@ -38,7 +39,7 @@ namespace chain_link {
         for(unsigned char i : ip){
             result.push_back(i);
         }
-        val=intToBits<uint16_t> (port);
+        val=intToBits<uint16_t> (port,false);
         result.insert(result.end(),val.begin(),val.end());
         return result;
     }
@@ -63,7 +64,7 @@ namespace chain_link {
         bool most= std::tie(services, timestamp,  port, initial_) ==
                std::tie(rhs.services, rhs.timestamp, rhs.port, rhs.initial_) ;
 
-        return most && compareArray<unsigned char>(ip,16,rhs.ip,16);
+        return most && compareArray<const unsigned char>(ip,16,rhs.ip,16);
     }
 
     bool Address::operator!=(const Address &rhs) const {

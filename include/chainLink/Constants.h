@@ -11,11 +11,11 @@ namespace chain_link {
     class Config {
         class ConfigBase {
         public:
-            std::array<uint8_t, 4> GetMagicBytes() { return magicBytes;}
+            std::array<unsigned char, 4> GetMagicBytes() { return magicBytes;}
             int GetPort() { return port;}
 
         protected:
-            std::array<uint8_t, 4> magicBytes;
+            std::array<unsigned char, 4> magicBytes;
             int port;
         };
         class MainNetConfig : public ConfigBase {
@@ -26,12 +26,10 @@ namespace chain_link {
             public:
             TestNetConfig();
         };
-    private:
+    public:
         static Config::ConfigBase config;
     public:
-        static Config::ConfigBase getConfig() {
-            return config;
-        }
+        static Config::ConfigBase getConfig();
         static void SetMainNet() {
             config=MainNetConfig();
         }
@@ -39,5 +37,6 @@ namespace chain_link {
             config=TestNetConfig();
         }
     };
+
 }
 #endif //CHAIN_GRABBER_CONSTANTS_H

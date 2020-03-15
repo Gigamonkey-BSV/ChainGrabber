@@ -10,7 +10,7 @@ class AddressTest : public ::testing::Test {
 protected:
     void SetUp() override {
         address1=chain_link::Address(true);
-        address1.port =24711;
+        address1.port =34656;
         address1.services=0;
         address1.timestamp=0;
         //0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ff, ff, 5c, 18, 34, 56
@@ -29,7 +29,8 @@ protected:
 
 TEST_F(AddressTest,TestDeserialize) {
 
-    chain_link::Address addr=chain_link::Address::DeSerialize(testPacket.begin(),true);
+    auto itr=testPacket.begin();
+    chain_link::Address addr=chain_link::Address::DeSerialize(itr,true);
 
     EXPECT_EQ(addr,address1);
 }

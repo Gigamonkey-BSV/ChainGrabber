@@ -11,12 +11,18 @@ namespace chain_link {
 
 
     void Node::start() {
-        boost::array<messages::MessageHeader,1> buf{};
-        boost::asio::async_read(socket_,boost::asio::buffer(buf),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
+        messages::BaseMessage buf{};
+        boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
     }
 
-    void Node::handle_header(boost::array<messages::MessageHeader, 1> buf, const boost::system::error_code &error) {
-        std::cout << buf[0] << std::endl;
+    void Node::handle_header(messages::BaseMessage buf, const boost::system::error_code &error) {
+        std::vector<unsigned char> header;
+        for(int i=0;i<24;i++)
+            //header.push_back(response_.data().data());
+            int p=0;
+        auto itr=header.begin();
+        buf.header=chain_link::messages::MessageHeader::Deserialize(itr);
+        std::cout << buf.header << std::endl;
     }
 
     Node::pointer Node::create(boost::asio::io_context &io_context, bool server) {

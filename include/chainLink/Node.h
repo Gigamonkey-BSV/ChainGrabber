@@ -9,6 +9,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <chainLink/messages/MessageHeader.h>
+#include <chainLink/messages/BaseMessage.h>
 #include "boost/asio.hpp"
 using boost::asio::ip::tcp;
 namespace chain_link {
@@ -26,7 +27,9 @@ private:
     explicit Node(boost::asio::io_context& io_context,bool server) : socket_(io_context),server_(server) {
 
     }
-    void handle_header(boost::array<messages::MessageHeader,1> buf,const boost::system::error_code& error);
+    void handle_header(messages::BaseMessage buf,const boost::system::error_code& error);
+    boost::asio::streambuf request_;
+    boost::asio::streambuf response_;
     tcp::socket socket_;
     bool server_;
 };

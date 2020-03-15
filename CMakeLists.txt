@@ -112,11 +112,14 @@ add_library(chain_link
 		src/chainLink/NodeServer.cpp
 		src/chainLink/Node.cpp
 		src/chainLink/messages/VersionPayload.cpp
-		src/chainLink/Address.cpp)
+		src/chainLink/Address.cpp
+		src/chainLink/Utils.cpp
+		src/chainLink/messages/MessageHeader.cpp
+		src/chainLink/messages/BaseMessage.cpp)
 add_executable(chain_grabber_main src/main.cpp )
 add_executable(chain_grabber_test src/test.cpp)
 
-target_link_libraries(chain_grabber_main chain_link chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z)
+target_link_libraries(chain_grabber_main chain_link chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z OpenSSL::SSL  OpenSSL::Crypto)
 target_link_libraries(chain_grabber_test chain_link chain_grabber ${LIBMONGOCXX_LIBRARIES} ${Boost_LIBRARIES}  nlohmann_json::nlohmann_json pthread z OpenSSL::SSL OpenSSL::Crypto)
 target_include_directories(chain_grabber PUBLIC include chain_link ${HYPODERMIC_INCLUDE_DIRS})
 

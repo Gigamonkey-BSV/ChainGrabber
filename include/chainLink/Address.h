@@ -16,11 +16,11 @@ namespace chain_link {
     public:
         uint64_t services{};
         int64_t timestamp{};
-        unsigned char ip[16]{};
+        unsigned char ip[16];
         uint16_t port{};
         bool initial_;
     public:
-        static Address DeSerialize(std::vector<unsigned char>::iterator data,bool initial);
+        static Address DeSerialize(std::vector<unsigned char>::iterator& data,bool initial);
         std::vector<unsigned char> Serialize();
         explicit Address(bool initial);
         explicit Address();

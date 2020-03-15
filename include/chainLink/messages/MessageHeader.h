@@ -8,21 +8,34 @@
 #include <cstdint>
 #include <array>
 #include <ostream>
+#include <vector>
 
 namespace chain_link::messages {
     class MessageHeader {
     public:
         friend std::ostream &operator<<(std::ostream &os, const MessageHeader &header) {
-            os << "MagicBytes: " << std::hex << header.MagicBytes[1] << header.MagicBytes[0] << header.MagicBytes[2] << " CommandName: " << header.CommandName << " PayloadSize: "
-               << header.PayloadSize << " Checksum: " << header.Checksum;
+            os << "MagicBytes: ";
+            for(unsigned char i: header.MagicBytes) {
+                os << std::hex << (unsigned int) i << ", ";
+            }
+            os << " CommandName: " << header.CommandName << " PayloadSize: "
+               << header.PayloadSize << " Checksum: " ;
+            for(unsigned char i:header.Checksum)
+                os << std::hex << (unsigned int) i << ", ";
             return os;
         }
-
-    private:
-        std::array<uint8_t, 4> MagicBytes;
+        std::vector<unsigned char> Serialize();
+        static MessageHeader Deserialize(std::vector<unsigned char>::iterator& data);
+    public:
+        std::array<unsigned char, 4> MagicBytes;
         char CommandName[12];
         uint32_t PayloadSize;
-        char Checksum[4];
+        std::array<unsigned char,4> Checksum;
+        void setCommand(std::string str);
+
+        bool operator==(const MessageHeader &rhs) const;
+
+        bool operator!=(const MessageHeader &rhs) const;
     };
 }
 

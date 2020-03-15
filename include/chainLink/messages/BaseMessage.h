@@ -9,12 +9,17 @@
 #include <array>
 #include "MessageHeader.h"
 #include "Payload.h"
+#include <boost/container_hash/hash.hpp>
 
 namespace chain_link::messages {
         class BaseMessage {
-        private:
+        public:
             MessageHeader header;
-            Payload payload;
+            Payload* payload;
+            bool isValid();
+            static BaseMessage MakeMessage(std::string messageType,Payload& payload);
         };
-    }
+
+
+}
 #endif //CHAIN_GRABBER_BASEMESSAGE_H

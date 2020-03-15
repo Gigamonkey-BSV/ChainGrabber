@@ -6,7 +6,7 @@
 
 namespace chain_link {
 
-
+    Config::ConfigBase Config::config;
     Config::MainNetConfig::MainNetConfig() {
         magicBytes[0]=0xe3;
         magicBytes[1] = 0xe1;
@@ -23,4 +23,7 @@ namespace chain_link {
     }
 
 
+    Config::ConfigBase Config::getConfig() {
+        return config;
+    }
 }
