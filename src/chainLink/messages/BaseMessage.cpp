@@ -20,7 +20,7 @@ namespace chain_link::messages {
 
     BaseMessage BaseMessage::MakeMessage(std::string messageType, Payload& payload) {
         BaseMessage msg{};
-        msg.payload = 
+        msg.payload =payload.Clone();
         msg.header.MagicBytes=Config::getConfig().GetMagicBytes();
         msg.header.setCommand(std::move(messageType));
         std::vector<unsigned char> payloadVector = msg.payload->Serialize();

@@ -34,6 +34,8 @@ namespace chain_link::messages {
         bool operator==(const Version &rhs) const;
 
         bool operator!=(const Version &rhs) const;
+
+        Version *Clone() override;
     };
 }
 #endif //CHAIN_GRABBER_VERSIONPAYLOAD_H

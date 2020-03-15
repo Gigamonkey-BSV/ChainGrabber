@@ -71,10 +71,21 @@ namespace chain_link {
         return !(rhs == *this);
     }
 
+
     Address::Address() {
         this->initial_=true;
         this->port=0;
         this->services=0;
         this->timestamp=0;
+    }
+
+    Address Address::Copy(const Address& addr) {
+        this->initial_=addr.initial_;
+        this->port=addr.port;
+        this->services=addr.services;
+        for(int i=0;i<16;i++) {
+            this->ip[i]=addr.ip[i];
+        }
+
     }
 }

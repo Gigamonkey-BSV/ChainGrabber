@@ -11,7 +11,8 @@
 namespace chain_link::messages {
     class Payload {
     public:
-        virtual std::vector<unsigned char> Serialize() {};
+        virtual std::vector<unsigned char> Serialize() { return std::vector<unsigned char>();};
+        virtual Payload* Clone(){return new Payload();};
     };
 }
 #endif //CHAIN_GRABBER_PAYLOAD_H

@@ -24,6 +24,7 @@ namespace chain_link {
         std::vector<unsigned char> Serialize();
         explicit Address(bool initial);
         explicit Address();
+        Address Copy(const Address& addr);
 
         bool operator==(const Address &rhs) const;
 

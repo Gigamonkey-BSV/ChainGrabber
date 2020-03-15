@@ -106,4 +106,20 @@ namespace chain_link::messages {
     bool Version::operator!=(const Version &rhs) const {
         return !(rhs == *this);
     }
+
+    Version *Version::Clone() {
+        Version* version1=new Version();
+        version1->version=version;
+        version1->services=services;
+        version1->timestamp=timestamp;
+        version1->addr_to=Address(addr_to);
+        version1->addr_from=Address(addr_from);
+        version1->nonce=nonce;
+        for(int i=0;i<12;i++)
+            version1->user_agent[i]=user_agent[i];
+        version1->start_height=start_height;
+        version1->relay=relay;
+        return version1;
+    }
+
 }
