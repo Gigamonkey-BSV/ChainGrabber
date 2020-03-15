@@ -6,4 +6,9 @@
 
 namespace chain_link::messages {
 
+    std::vector<unsigned char> Version::Serialize() {
+        std::vector<unsigned char> ret;
+
+        return ret;
+    }
 }

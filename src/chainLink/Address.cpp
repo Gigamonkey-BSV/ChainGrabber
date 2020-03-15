@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <tuple>
 #include "chainLink/Address.h"
 #include "chainLink/Utils.h"
 namespace chain_link {
@@ -55,5 +56,24 @@ namespace chain_link {
         os << "services: " << address.services << " timestamp: " << address.timestamp << " ip: " << ipstr
            << " port: " << address.port << " initial_: " << address.initial_;
         return os;
+    }
+
+    bool Address::operator==(const Address &rhs) const {
+
+        bool most= std::tie(services, timestamp,  port, initial_) ==
+               std::tie(rhs.services, rhs.timestamp, rhs.port, rhs.initial_) ;
+
+        return most && compareArray<unsigned char>(ip,16,rhs.ip,16);
+    }
+
+    bool Address::operator!=(const Address &rhs) const {
+        return !(rhs == *this);
+    }
+
+    Address::Address() {
+        this->initial_=true;
+        this->port=0;
+        this->services=0;
+        this->timestamp=0;
     }
 }

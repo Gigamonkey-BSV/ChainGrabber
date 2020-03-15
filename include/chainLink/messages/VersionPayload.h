@@ -9,6 +9,10 @@
 #include "chainLink/Address.h"
 namespace chain_link::messages {
     class Version : public Payload {
+    public:
+    private:
+        std::vector<unsigned char> Serialize() override;
+
     private:
         int32_t version;
         uint64_t services;
@@ -19,6 +23,7 @@ namespace chain_link::messages {
         std::string user_agent;
         int32_t start_height;
         bool relay;
+
 
     };
 }

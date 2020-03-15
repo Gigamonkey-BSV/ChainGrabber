@@ -31,6 +31,18 @@ namespace chain_link {
 
         return result;
     }
+    template <typename ArrayType>
+    bool compareArray(const unsigned char *sourceArray, int16_t size, const unsigned char *rhsArray, int16_t rhsSize) {
+        if(size!=rhsSize)
+            return false;
+
+        for(int i=0;i<size;i++)
+        {
+            if(sourceArray[i]!=rhsArray[i])
+                return false;
+        }
+        return true;
+    }
 
 }
 #endif //CHAIN_GRABBER_UTILS_H

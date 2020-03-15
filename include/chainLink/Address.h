@@ -13,16 +13,21 @@ namespace chain_link {
     public:
         friend std::ostream &operator<<(std::ostream &os, const Address &address);
 
-    private:
-        uint64_t services;
-        int64_t timestamp;
-        unsigned char ip[16];
-        uint16_t port;
+    public:
+        uint64_t services{};
+        int64_t timestamp{};
+        unsigned char ip[16]{};
+        uint16_t port{};
         bool initial_;
     public:
         static Address DeSerialize(std::vector<unsigned char>::iterator data,bool initial);
         std::vector<unsigned char> Serialize();
         explicit Address(bool initial);
+        explicit Address();
+
+        bool operator==(const Address &rhs) const;
+
+        bool operator!=(const Address &rhs) const;
     };
 }
 #endif //CHAIN_GRABBER_ADDRESS_H

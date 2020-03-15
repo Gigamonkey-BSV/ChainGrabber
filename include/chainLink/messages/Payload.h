@@ -10,7 +10,7 @@
 
 namespace chain_link::messages {
     class Payload {
-
+        virtual std::vector<unsigned char> Serialize() = 0;
     };
 }
 #endif //CHAIN_GRABBER_PAYLOAD_H
