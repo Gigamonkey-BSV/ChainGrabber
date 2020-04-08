@@ -15,13 +15,12 @@ namespace chain_link::messages {
         class BaseMessage {
         public:
             MessageHeader header;
-            Payload* payload;
+            std::shared_ptr<Payload> payload;
             bool isValid();
-            static BaseMessage MakeMessage(std::string messageType,Payload& payload);
-        protected:
+            static BaseMessage MakeMessage(std::string messageType,std::shared_ptr<chain_link::messages::Payload> payload);
+            void setPayload(std::shared_ptr<chain_link::messages::Payload> payload1);
             BaseMessage();
-        protected:
-            virtual ~BaseMessage();
+            std::vector<unsigned char> Serialize();
         };
 
 

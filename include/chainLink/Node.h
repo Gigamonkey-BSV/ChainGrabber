@@ -28,6 +28,7 @@ private:
 
     }
     void handle_header(messages::BaseMessage buf,const boost::system::error_code& error);
+    void handle_payload(messages::BaseMessage buf,const boost::system::error_code& error);
     boost::asio::streambuf request_;
     boost::asio::streambuf response_;
     tcp::socket socket_;

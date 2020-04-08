@@ -12,15 +12,16 @@
 namespace chain_link::messages {
 
     bool BaseMessage::isValid() {
-        std::vector<unsigned char> payloadVector=payload->Serialize();
+        Payload* payloadDir=payload.get();
+        std::vector<unsigned char> payloadVector=payloadDir->Serialize();
         std::vector<unsigned char> hash=ShaArray(payloadVector);
         hash=ShaArray(hash);
         return compareArray<unsigned char>(header.Checksum.data(),4,hash.data(),4);
     }
 
-    BaseMessage BaseMessage::MakeMessage(std::string messageType, Payload& payload) {
+    BaseMessage BaseMessage::MakeMessage(std::string messageType, std::shared_ptr<chain_link::messages::Payload> payload) {
         BaseMessage msg{};
-        msg.payload =payload.Clone();
+        msg.setPayload(payload);
         msg.header.MagicBytes=Config::getConfig().GetMagicBytes();
         msg.header.setCommand(std::move(messageType));
         std::vector<unsigned char> payloadVector = msg.payload->Serialize();
@@ -34,9 +35,20 @@ namespace chain_link::messages {
 
     BaseMessage::BaseMessage() {}
 
-    BaseMessage::~BaseMessage() {
-        delete payload;
 
+
+    void BaseMessage::setPayload(std::shared_ptr<chain_link::messages::Payload> payload1) {
+        payload =payload1;
+    }
+
+    std::vector<unsigned char> BaseMessage::Serialize() {
+        std::vector<unsigned char> ret;
+        std::vector<unsigned char> val;
+        val=header.Serialize();
+        ret.insert(ret.end(),val.begin(),val.end());
+        val=payload->Serialize();
+        ret.insert(ret.end(),val.begin(),val.end());
+        return ret;
     }
 
 

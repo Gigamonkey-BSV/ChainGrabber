@@ -122,4 +122,22 @@ namespace chain_link::messages {
         return version1;
     }
 
+    Version::Version(const Version& version1) {
+        version=version1.version;
+        services=version1.services;
+        timestamp=version1.timestamp;
+        addr_to=Address(version1.addr_to);
+        addr_from=Address(version1.addr_from);
+        nonce=version1.nonce;
+        for(int i=0;i<12;i++)
+            user_agent[i]=version1.user_agent[i];
+        start_height=version1.start_height;
+        relay=version1.relay;
+    }
+
+    Version::Version() {
+
+    }
+
+
 }

@@ -88,4 +88,15 @@ namespace chain_link {
         }
 
     }
+
+    void Address::setIP(int a, int b, int c, int d) {
+        ip[0]=ip[1]=ip[2]=ip[3]=ip[4]=ip[5]=ip[6]=ip[7]=ip[8]=ip[9]=0x00;
+        ip[10] = 0xff;
+        ip[11] = 0xff;
+        ip[12]=a;
+        ip[13]=b;
+        ip[14]=c;
+        ip[15]=d;
+
+    }
 }

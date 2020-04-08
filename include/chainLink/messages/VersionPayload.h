@@ -11,6 +11,9 @@
 namespace chain_link::messages {
     class Version : public Payload {
     public:
+        Version(const Version& version1);
+        Version();
+
     private:
 
 

@@ -29,6 +29,7 @@ namespace chain_link {
         bool operator==(const Address &rhs) const;
 
         bool operator!=(const Address &rhs) const;
+        void setIP(int a,int b,int c,int d);
     };
 }
 #endif //CHAIN_GRABBER_ADDRESS_H
