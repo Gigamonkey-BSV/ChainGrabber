@@ -18,7 +18,7 @@ namespace chain_link::messages {
 
 
     public:
-        std::vector<unsigned char> Serialize() override;
+        virtual std::vector<unsigned char> Serialize() override;
         int32_t version;
         uint64_t services;
         int64_t timestamp;
@@ -30,7 +30,7 @@ namespace chain_link::messages {
         bool relay;
 
 
-        static Version Deserialize(std::vector<unsigned char>::iterator& data);
+        static std::shared_ptr<Version> Deserialize(std::vector<unsigned char>::iterator& data);
 
         friend std::ostream &operator<<(std::ostream &os, const Version &version);
 
@@ -39,6 +39,8 @@ namespace chain_link::messages {
         bool operator!=(const Version &rhs) const;
 
         Version *Clone() override;
+
+        virtual ~Version();
     };
 }
 #endif //CHAIN_GRABBER_VERSIONPAYLOAD_H

@@ -60,7 +60,7 @@ namespace chain_link {
         auto itr=header.begin();
         std::string tmp=buf.header.CommandName;
         if(tmp=="version") {
-            auto version1=std::make_shared<chain_link::messages::Version>(chain_link::messages::Version::Deserialize(itr));
+            auto version1=std::shared_ptr<chain_link::messages::Version>(chain_link::messages::Version::Deserialize(itr));
             buf.setPayload(version1);
         } else if(tmp=="reject") {
             auto tmp2=header.end();

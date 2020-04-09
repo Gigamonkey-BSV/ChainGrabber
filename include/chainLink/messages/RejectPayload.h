@@ -25,6 +25,8 @@ namespace chain_link::messages {
         bool operator==(const RejectPayload &rhs) const;
 
         bool operator!=(const RejectPayload &rhs) const;
+
+        Payload *Clone() override;
     };
 }
 #endif //CHAIN_GRABBER_REJECTPAYLOAD_H

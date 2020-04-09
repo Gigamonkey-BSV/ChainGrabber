@@ -17,12 +17,12 @@ protected:
         itr=payloadPacket.begin();
         version1=chain_link::messages::Version::Deserialize(itr);
         message1.header=header1;
-        message1.setPayload(std::make_shared<chain_link::messages::Payload>(version1));
+        message1.setPayload(std::shared_ptr<chain_link::messages::Payload>(version1));
     }
     std::vector<unsigned char> headerPacket=strToTestVector("e3e1f3e876657273696f6e00000000006800000005f178c7");
     std::vector<unsigned char> payloadPacket=strToTestVector("7f1101002500000000000000c02f6e5e00000000000000000000000000000000000000000000ffff5c183534b03c25000000000000000000000000000000000000000000000000003933dcf677284ed6122f426974636f696e2053563a312e302e322f998e090001e3e1f3e876657261636b000000000000000000005df6e0e2");
     chain_link::messages::MessageHeader header1;
-    chain_link::messages::Version version1;
+    std::shared_ptr<chain_link::messages::Version> version1;
     chain_link::messages::BaseMessage message1;
 };
 
@@ -36,7 +36,7 @@ TEST_F(MessageTest,TestInValidity) {
     EXPECT_FALSE(message1.isValid());
 }
 TEST_F(MessageTest,InitializeMessage) {
-    chain_link::messages::BaseMessage message=chain_link::messages::BaseMessage::MakeMessage("version",std::make_shared<chain_link::messages::Payload>(version1));
+    chain_link::messages::BaseMessage message=chain_link::messages::BaseMessage::MakeMessage("version",std::shared_ptr<chain_link::messages::Payload>(version1));
     EXPECT_TRUE(message.isValid());
 
 }

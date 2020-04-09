@@ -68,9 +68,9 @@ protected:
 };
 TEST_F(VersionTest,TestDeserialize) {
     auto itr=testPacket.begin();
-    chain_link::messages::Version testVersion=chain_link::messages::Version::Deserialize(itr);
+    std::shared_ptr<chain_link::messages::Version> testVersion=chain_link::messages::Version::Deserialize(itr);
     std::cout << testVersion << std::endl;
-    EXPECT_EQ(version1,testVersion);
+    EXPECT_EQ(version1,*testVersion);
 
 }
 

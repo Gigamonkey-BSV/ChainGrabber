@@ -41,46 +41,46 @@ namespace chain_link::messages {
         return ret;
     }
 
-    Version Version::Deserialize(std::vector<unsigned char>::iterator& data) {
-        Version version;
-        bitsToInt<int32_t>(version.version,std::vector<unsigned char>(data,data+4));
+    std::shared_ptr<Version> Version::Deserialize(std::vector<unsigned char>::iterator& data) {
+        std::shared_ptr<Version> version=std::make_shared<Version>();
+        bitsToInt<int32_t>(version->version,std::vector<unsigned char>(data,data+4));
         data+=4;
-        bitsToInt<uint64_t>(version.services,std::vector<unsigned char>(data,data+8));
+        bitsToInt<uint64_t>(version->services,std::vector<unsigned char>(data,data+8));
         data+=8;
-        bitsToInt<int64_t>(version.timestamp,std::vector<unsigned char>(data,data+8));
+        bitsToInt<int64_t>(version->timestamp,std::vector<unsigned char>(data,data+8));
         data+=8;
-        version.addr_to=chain_link::Address::DeSerialize(data,true);
-        if(version.version>=106) {
-            version.addr_from=chain_link::Address::DeSerialize(data,true);
-            bitsToInt<uint64_t>(version.nonce,std::vector<unsigned char>(data,data+8));
+        version->addr_to=chain_link::Address::DeSerialize(data,true);
+        if(version->version>=106) {
+            version->addr_from=chain_link::Address::DeSerialize(data,true);
+            bitsToInt<uint64_t>(version->nonce,std::vector<unsigned char>(data,data+8));
             data+=8;
             uint64_t user_agent_size=getVarInt(data);
             std::vector<char> user_agent_vector;
             for(int i=0;i<user_agent_size;i++) {
                 user_agent_vector.push_back(*data++);
             }
-            version.user_agent=std::string(user_agent_vector.begin(),user_agent_vector.end());
+            version->user_agent=std::string(user_agent_vector.begin(),user_agent_vector.end());
         } else
         {
-            version.addr_from= chain_link::Address();
-            version.nonce=0;
-            version.user_agent="";
-            version.start_height=0;
+            version->addr_from= chain_link::Address();
+            version->nonce=0;
+            version->user_agent="";
+            version->start_height=0;
         }
-        if(version.version>=209) {
-            bitsToInt<int32_t>(version.start_height,std::vector<unsigned char>(data,data+4));
+        if(version->version>=209) {
+            bitsToInt<int32_t>(version->start_height,std::vector<unsigned char>(data,data+4));
             data+=4;
         }
-        if(version.version>=70001) {
+        if(version->version>=70001) {
             try {
-                version.relay=*data++ == 1;
+                version->relay=*data++ == 1;
             }
             catch(std::exception& e)
             {
-                version.relay= false;
+                version->relay= false;
             }
         } else{
-            version.relay=false;
+            version->relay=false;
         }
 
 
@@ -136,6 +136,10 @@ namespace chain_link::messages {
     }
 
     Version::Version() {
+
+    }
+
+    Version::~Version() {
 
     }
 

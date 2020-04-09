@@ -22,6 +22,8 @@ namespace chain_link::messages {
         extra= nullptr;
     }
 
+
+
     std::vector<unsigned char> RejectPayload::Serialize() {
         std::vector<unsigned char> ret;
         std::vector<unsigned char> val;
@@ -79,6 +81,15 @@ namespace chain_link::messages {
 
     bool RejectPayload::operator!=(const RejectPayload &rhs) const {
         return !(rhs == *this);
+    }
+
+    Payload* RejectPayload::Clone() {
+        RejectPayload* payload=new RejectPayload();
+        payload->code=this->code;
+        payload->message=this->message;
+        payload->reason=this->reason;
+        payload->extra=payload->extra;
+        return payload;
     }
 }
 
