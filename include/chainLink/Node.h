@@ -33,6 +33,7 @@ private:
     boost::asio::streambuf response_;
     tcp::socket socket_;
     bool server_;
+
 };
 }
 #endif //CHAIN_GRABBER_NODE_H

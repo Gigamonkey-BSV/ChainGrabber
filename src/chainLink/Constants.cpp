@@ -12,14 +12,14 @@ namespace chain_link {
         magicBytes[1] = 0xe1;
         magicBytes[2] = 0xf3;
         magicBytes[3] = 0xe8;
-        port = 8333;
+        port = "8333";
     }
     Config::TestNetConfig::TestNetConfig() {
         magicBytes[0]=0xf4;
         magicBytes[1] = 0xe5;
         magicBytes[2] = 0xf3;
         magicBytes[3] = 0xf4;
-        port = 18333;
+        port = "18333";
     }
 
 

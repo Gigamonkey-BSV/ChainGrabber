@@ -114,9 +114,12 @@ add_library(chain_link
 		src/chainLink/messages/VersionPayload.cpp
 		src/chainLink/Address.cpp
 		src/chainLink/Utils.cpp
+		src/chainLink/SVNode.cpp
 		src/chainLink/messages/MessageHeader.cpp
 		src/chainLink/messages/BaseMessage.cpp
-		src/chainLink/messages/RejectPayload.cpp)
+		src/chainLink/messages/RejectPayload.cpp
+		src/chainLink/messages/PingPayload.cpp
+		src/chainLink/messages/PongPayload.cpp)
 add_executable(chain_grabber_main src/main.cpp )
 add_executable(chain_grabber_test src/test.cpp)
 

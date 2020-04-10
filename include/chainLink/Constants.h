@@ -12,11 +12,11 @@ namespace chain_link {
         class ConfigBase {
         public:
             std::array<unsigned char, 4> GetMagicBytes() { return magicBytes;}
-            int GetPort() { return port;}
+            std::string GetPort() { return port;}
 
         protected:
             std::array<unsigned char, 4> magicBytes;
-            int port;
+            std::string port;
         };
         class MainNetConfig : public ConfigBase {
         public:

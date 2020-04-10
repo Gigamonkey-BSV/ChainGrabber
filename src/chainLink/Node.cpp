@@ -5,6 +5,8 @@
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
 #include <iostream>
+#include <chainLink/messages/PingPayload.h>
+#include <chainLink/messages/PongPayload.h>
 #include "chainLink/Node.h"
 #include "chainLink/Version.h"
 #include "chainLink/messages/MessageHeader.h"
@@ -56,20 +58,46 @@ namespace chain_link {
         auto* output = (unsigned char*)malloc(response_.size());
         memcpy(output, boost::asio::buffer_cast<const void*>(response_.data()), response_.size());
         header=std::vector<unsigned char>(output,output+response_.size());
-
+        response_.consume(response_.size());
         auto itr=header.begin();
         std::string tmp=buf.header.CommandName;
         if(tmp=="version") {
             auto version1=std::shared_ptr<chain_link::messages::Version>(chain_link::messages::Version::Deserialize(itr));
             buf.setPayload(version1);
+            std::cout << version1.get()->user_agent << std::endl;
+
+
+            boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
         } else if(tmp=="reject") {
             auto tmp2=header.end();
             auto reject1=std::make_shared<chain_link::messages::RejectPayload>(chain_link::messages::RejectPayload::Deserialize(itr,tmp2));
             buf.setPayload(reject1);
-        } else
-        {
-            std::cout << "Unknown Command name: " + tmp;
+            std::cout << reject1;
+        } else if(tmp=="ping") {
+            auto ping1=chain_link::messages::Ping::Deserialize(itr);
+            buf.setPayload(ping1);
         }
-        std::cout << buf.payload;
+        else if(tmp=="pong") {
+            auto pong1=chain_link::messages::Pong::Deserialize(itr);
+            buf.setPayload(pong1);
+            std::cout << "Got a pong" << std::endl;
+        }
+        else if(tmp=="verack") {
+            std::cout << "Veracked" << std::endl;
+            chain_link::messages::Ping pingSend;
+            pingSend.setNonce(12345);
+            messages::BaseMessage send;
+
+            std::shared_ptr<chain_link::messages::Payload> payload=std::make_shared<chain_link::messages::Ping>(pingSend);
+            send=chain_link::messages::BaseMessage::MakeMessage("ping",payload);
+            std::vector<unsigned char> output=send.Serialize();
+            boost::asio::write(socket_,boost::asio::buffer(output));
+            boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
+        }
+        else
+        {
+            std::cout << "Unknown Command name: " + tmp << std::endl;
+        }
+
     }
 }
