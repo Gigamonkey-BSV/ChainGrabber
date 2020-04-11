@@ -24,9 +24,21 @@ namespace chain_link::messages {
         msg.setPayload(payload);
         msg.header.MagicBytes=Config::getConfig().GetMagicBytes();
         msg.header.setCommand(std::move(messageType));
-        std::vector<unsigned char> payloadVector = msg.payload->Serialize();
-        msg.header.PayloadSize=payloadVector.size();
-        std::vector<unsigned char> hash=ShaArray(ShaArray(payloadVector));
+        std::vector<unsigned char> hash;
+        if(payload!= nullptr) {
+            std::vector<unsigned char> payloadVector = msg.payload->Serialize();
+            msg.header.PayloadSize = payloadVector.size();
+
+            hash = ShaArray(ShaArray(payloadVector));
+        }
+        else {
+            msg.header.PayloadSize = 0;
+            hash.push_back(0xe2);
+            hash.push_back(0xe0);
+            hash.push_back(0xf6);
+            hash.push_back(0x5d);
+        }
+
         auto itr=hash.begin();
         for(unsigned char& c:msg.header.Checksum)
             c=*itr++;
@@ -46,8 +58,10 @@ namespace chain_link::messages {
         std::vector<unsigned char> val;
         val=header.Serialize();
         ret.insert(ret.end(),val.begin(),val.end());
-        val=payload->Serialize();
-        ret.insert(ret.end(),val.begin(),val.end());
+        if(payload!= nullptr) {
+            val = payload->Serialize();
+            ret.insert(ret.end(), val.begin(), val.end());
+        }
         return ret;
     }
 

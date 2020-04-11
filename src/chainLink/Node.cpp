@@ -7,6 +7,7 @@
 #include <iostream>
 #include <chainLink/messages/PingPayload.h>
 #include <chainLink/messages/PongPayload.h>
+#include <chainLink/messages/ProtoconfPayload.h>
 #include "chainLink/Node.h"
 #include "chainLink/Version.h"
 #include "chainLink/messages/MessageHeader.h"
@@ -35,13 +36,26 @@ namespace chain_link {
 
     void Node::handle_header(messages::BaseMessage buf, const boost::system::error_code &error) {
         std::vector<unsigned char> header;
+        if(error.failed())
+        {
+            std::cout << "Connection failed" << std::endl;
+            std::cout << error.message()<< std::endl;
+            return;
+        }
+        if(response_.size()!=24) {
+            std::cout << "Skipping bad data, where is this from?" << std::endl;
+            auto* output = (unsigned char*)malloc(response_.size());
+            memcpy(output, boost::asio::buffer_cast<const void*>(response_.data()), response_.size());
+            header=std::vector<unsigned char>(output,output+24);
+
+            response_.consume(response_.size());
+            boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
+            return;
+        }
         auto* output = (unsigned char*)malloc(response_.size());
         memcpy(output, boost::asio::buffer_cast<const void*>(response_.data()), response_.size());
         header=std::vector<unsigned char>(output,output+24);
-        //if(!=24) {
-        //    boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
-        //    return;
-        //}
+
         auto itr=header.begin();
         buf.header=chain_link::messages::MessageHeader::Deserialize(itr);
         response_.consume(response_.size());
@@ -83,16 +97,22 @@ namespace chain_link {
             std::cout << "Got a pong" << std::endl;
         }
         else if(tmp=="verack") {
-            std::cout << "Veracked" << std::endl;
-            chain_link::messages::Ping pingSend;
-            pingSend.setNonce(12345);
             messages::BaseMessage send;
-
-            std::shared_ptr<chain_link::messages::Payload> payload=std::make_shared<chain_link::messages::Ping>(pingSend);
-            send=chain_link::messages::BaseMessage::MakeMessage("ping",payload);
+            send=chain_link::messages::BaseMessage::MakeMessage("verack", nullptr);
             std::vector<unsigned char> output=send.Serialize();
             boost::asio::write(socket_,boost::asio::buffer(output));
             boost::asio::async_read(socket_,response_,boost::asio::transfer_exactly(24),boost::bind(&Node::handle_header,this,buf,boost::asio::placeholders::error));
+        }
+        else if(tmp=="protoconf")
+        {
+            auto protoconf=chain_link::messages::Protoconf::Deserialize(itr);
+            buf.setPayload(protoconf);
+            std::cout << protoconf.get() << std::endl;
+            chain_link::messages::Ping pingSend;
+            pingSend.setNonce(std::chrono::system_clock::now().time_since_epoch().count());
+            messages::BaseMessage send;
+
+            std::shared_ptr<chain_link::messages::Payload> payload=std::make_shared<chain_link::messages::Ping>(pingSend);
         }
         else
         {
